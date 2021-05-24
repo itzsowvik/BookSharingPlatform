@@ -1,11 +1,14 @@
 <?php
 
 //include_once '../Model/connection.php';
+/* The code look too much dirty
+   Need to be cleaned
+   */
 
  function loginVerify($username, $password){
 
    include_once '../Controller/loginVerify.php';
-   
+
    include_once '../Model/database.php';
 
    if($username == "admin"){
@@ -20,11 +23,11 @@
    }
 
   else{
-    //echo $username; echo $password;
+
     $query = "select * from user where username = '$username' and password = '$password' ";
 
     $retVal = $con->query($query);
-  
+
     if($retVal->num_rows == 1){
         header('location:../view/homepage.php');
     }
@@ -34,15 +37,15 @@
   }
 
   session_start();
-  $_SESSION['username'] = $username; 
+  $_SESSION['username'] = $username;
 
- 
+
 }
 
 
 function signupVerify($username, $fullname, $email, $address, $phoneNumber, $secMoney, $password){
 
-    
+
     include_once '../Controller/signupverify.php';
     include_once '../Model/database.php';
 
@@ -64,7 +67,7 @@ function bookAdd($folder,$title, $author, $catagory, $description, $actualprice,
 
     include_once '../View/bookadd.php';
 
-    
+
     include_once '../Model/database.php';
 
     session_start();
@@ -77,11 +80,10 @@ function bookAdd($folder,$title, $author, $catagory, $description, $actualprice,
 
     $userid = (int)$row1;
 
-    
+
     $availability = "yes";
-    $sql = "insert into book (bookimage, title,author,catagory,description,availability,actualprice,priceperday,username,userid) 
+    $sql = "insert into book (bookimage, title,author,catagory,description,availability,actualprice,priceperday,username,userid)
     values('$folder','$title','$author','$catagory', '$description','$availability',$actualprice,$priceperday,'$username', $userid)";
-    //echo $con->query($sql);
     if($con->query($sql) == TRUE){
       header('location:../view/homepage.php');
     }
@@ -121,10 +123,10 @@ function bookRent($bookrentdays, $bookid){
 
       $sql2="update book set availability = 'no' where bookid = $bookid";
       $res1 = $con->query($sql2);
-    
+
       $sql3 = "insert into rentbook ('userid', 'bookid') values ($userid, $bookid)";
       $res4 = $con->query($sql3);
-      
+
       $sql6 = "select username from book where bookid = $bookid";
       $res6 = $con->query($sql6);
       $row6 = mysqli_fetch_assoc($res6);
@@ -136,7 +138,7 @@ function bookRent($bookrentdays, $bookid){
       $temp7 = $row7['secmoney'];
       $renterSecMoney = (int)$temp7;
 
-      
+
 
       $renterSecMoney+= ($bookrentdays*$priceperday);
       $userSecmoney-= ($bookrentdays*$priceperday);
@@ -152,7 +154,7 @@ function bookRent($bookrentdays, $bookid){
     else{
       echo "Book Cannot be rented!. Insufficient Balance!";
     }
-    
+
 }
 
 function userUpdate($name, $address, $phone, $email, $username, $secmoney, $password){
@@ -170,21 +172,21 @@ function userUpdate($name, $address, $phone, $email, $username, $secmoney, $pass
 }
 
 function bookdelete($bookid){
-  include_once '../Model/database.php';
-   
+  include_once '../Model/database.php'; //wrong include
+
   $sql = "delete from book where bookid = $bookid";
-  
+
   if($con->query($sql) == TRUE){
     header('location:/project/view/booklist.php');
   }
   else
   echo "Something went wrong";
-   
+
 }
 
 function bookDataUpdate($bookid, $title, $author, $catagory, $description, $actualprice, $priceperday, $availability){
-  
-  
+
+
   include_once '../Model/database.php';
 
   $bookids = (int)$bookid;
